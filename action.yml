@@ -1,0 +1,8 @@
+name: "Auto Merge Schedule"
+description: "Automatically merge any mergeable pull requests."
+branding:
+  icon: "git-merge"
+  color: purple
+runs:
+  using: "node12"
+  main: "index.js"
