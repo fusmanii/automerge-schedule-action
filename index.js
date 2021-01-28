@@ -2,6 +2,7 @@ const core = require("@actions/core");
 const { Octokit } = require("@octokit/action");
 
 const AUTOMERGE = "automerge";
+const KEEPITFRESH = "keepitfresh";
 
 main();
 
@@ -24,7 +25,9 @@ async function main() {
     (response) => {
       return response.data
         .filter((pullRequest) =>
-          pullRequest.labels.map((label) => label.name).includes(AUTOMERGE)
+          [AUTOMERGE, KEEPITFRESH].some((label) =>
+            pullRequest.labels.map((label) => label.name).includes(label)
+          )
         )
         .map((pullRequest) => {
           return {
@@ -67,7 +70,10 @@ async function main() {
       )}`
     );
     comparisonByPullRequest[pullRequest.number] = comparison.behind_by;
-    if (comparison.behind_by === 0) {
+    if (
+      comparison.behind_by === 0 &&
+      pullRequest.labels.map((label) => label.name).includes(AUTOMERGE)
+    ) {
       core.info(
         `Attempting to merge ${pullRequest.head.ref} into ${pullRequest.base.ref}`
       );
