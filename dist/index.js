@@ -4810,6 +4810,7 @@ async function main() {
             ref: pullRequest.head.sha,
             head: pullRequest.head,
             base: pullRequest.base,
+            labels: pullRequest.labels,
           };
         })
         .sort((first, second) =>
